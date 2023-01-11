@@ -16,6 +16,7 @@ module.exports = async (rWit, indexChat) => {
     }
 
     if ( Object.keys(resJson).length !== 0 ) {
+        console.log("aqui esta el trait", resJson);
         if ( false ) {
             robotRes = resJson["any"];
         } else {
@@ -30,7 +31,7 @@ module.exports = async (rWit, indexChat) => {
             if ( typeof robotRes === "string" ) {
                 // No hacer nada
             } else if ( typeof robotRes === "function" ) {
-                robotRes = robotRes();
+                robotRes = robotRes(rWit["wit"]["intents"], rWit["wit"]["entities"]);
             }
         }
     }

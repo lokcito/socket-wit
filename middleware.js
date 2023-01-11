@@ -7,6 +7,7 @@ const witClient = new Wit({
 
 module.exports = async(msg) => {
     let response = await witClient.message(msg);
+    // console.log("xxxxxxx", response);
     let witTraits = [];
     let witTraitsVal = [];
     let witIntents = [];

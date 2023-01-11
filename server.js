@@ -23,15 +23,42 @@ const io = new Server(server,  {
     }
 });
 let indexChat = 0;
+let sentToWit = true;
 io.on("connection", function(socket) {
     console.log("usuario conectado");
     socket.on("ask", async (data) => {
+        let responseWit;
+        if ( sentToWit ) {
+            // Algoritmo que permite mapear la respuesta de WIT
+            responseWit = await manageWit(data["msg"]);
+        } else {
+            console.log("----> Respuesta local <-----");
+            responseWit = {
+                traits: [ 'trato_track' ],
+                traitsVal: [ 'trato_track->[orden]' ],
+                intents: [ 'action_tracking' ],
+                entities: [
+                  'e_orden_especifico:e_orden_especifico',
+                ],
+                wit: {"entities":{
+                    "e_orden_especifico:e_orden_especifico":
+                    [{
+                        "name":"e_orden_especifico",
+                        "value": data["msg"]}],
+                    },
+                    "intents":[{
+                        "name":"action_tracking"}],
+                    "traits":{"trato_track":[{
+                        "value":"orden"}]}}
+            };
+        }
+        sentToWit = true;
         
-        // Algoritmo que permite mapear la respuesta de WIT
-        let responseWit = await manageWit(data["msg"]);
-        console.log(responseWit);
         let serverResponse = await chatRobot(responseWit, indexChat);
-        console.log(serverResponse);
+        if ( serverResponse.includes("->") ) {
+            sentToWit = false;
+        }
+        //console.log(serverResponse);
         tableChat.push(
             {"Usuario": data["msg"]},
             {"Intents": JSON.stringify(responseWit["intents"])},

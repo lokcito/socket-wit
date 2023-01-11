@@ -20,7 +20,7 @@ module.exports = async () => {
                     "despido"],
                 "saludo": "Se sugiero comprar gorritos de lana de esta temporada.",
                 "despido": "Gracias por escribirnos, avisenos si desea algo mas.",
-                "any": async function() {
+                "any": async function(ints, ents) {
                     // Aqui consultar a mysql
                     // Consultar a una API
                     let {data} = await axios.get("https://fipo.equisd.com/api/products.json");
@@ -28,6 +28,25 @@ module.exports = async () => {
                         return `<div class="product-item"><a target="_blank" href='https://google.com'><img width="32" src='${e.avatar}'> ${e.name}</a></div>`;
                     })).join("");
                     return `Claro, puedo sugerirte los siguientes productos: ${result}`;
+                }
+            }
+        },
+        "trato_track": {
+            "orden": {
+                "any": async function(ints, ents) {
+                    let ordenSpecific = ents.hasOwnProperty("e_orden_especifico:e_orden_especifico");
+                    let ordenCode = undefined;
+                    if ( ordenSpecific ) {
+                        if ( ents["e_orden_especifico:e_orden_especifico"].length > 0 ) {
+                            ordenCode = ents["e_orden_especifico:e_orden_especifico"][0]["value"];
+                            return `<a style="color: white" target="_blank" 
+                                href="https://wwwapps.ups.com/WebTracking/track?trackNums=${ordenCode}&requester=ST/trackdetails">Pincha aqui para seguir tu orden.</a>`;
+                        }
+                        
+                        // llamar a la API
+                    }
+
+                    return "Por favor indicame el numero de tu orden ->";
                 }
             }
         }
