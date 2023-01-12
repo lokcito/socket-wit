@@ -15,8 +15,7 @@ module.exports = async (rWit, indexChat) => {
         }
     }
 
-    if ( Object.keys(resJson).length !== 0 ) {
-        console.log("aqui esta el trait", resJson);
+    if ( resJson && Object.keys(resJson).length !== 0 ) {
         if ( false ) {
             robotRes = resJson["any"];
         } else {
