@@ -6,7 +6,7 @@ COPY . .
 
 RUN npm ci 
 
-EXPOSE 8000
+EXPOSE 4000
 
 CMD ["npm", "run", "start"]
 
